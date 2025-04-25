@@ -1,4 +1,6 @@
-# JavaPhotoWidget
+# JavaPhotoWidget 
+
+<img src="src/main/resources/com/juanrdzbaeza/javaphotowidget/icon.png" alt="Icon" width="256" height="256">
 
 JavaPhotoWidget is a JavaFX-based application for managing and displaying images in a carousel. It allows users to load images from directories or files, display them in a slideshow, and save them to a SQLite database.
 
