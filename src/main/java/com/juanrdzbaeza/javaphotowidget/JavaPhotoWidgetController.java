@@ -53,7 +53,11 @@ public class JavaPhotoWidgetController {
         if (!images.isEmpty()) {
             startImageCarousel();
         }
-
+        else {
+            // Cargar imágenes desde la base de datos al iniciar
+            images.addAll(javaPhotoWidgetLogic.loadImagesFromDatabase());
+            startImageCarousel();
+        }
 
     }
 
@@ -120,6 +124,14 @@ public class JavaPhotoWidgetController {
         // Evento para mostrar los botones al hacer clic en la imagen
         imageView.setOnMouseClicked(event -> {
             imageView.setFitHeight(1040);
+            try {
+                javaPhotoWidgetLogic.saveImageToDatabase(
+                        Paths.get(new java.net.URI(imageView.getImage().getUrl())).toString(),
+                        imageView.getImage().getUrl().substring(imageView.getImage().getUrl().lastIndexOf("/") + 1)
+                );
+            } catch (URISyntaxException e) {
+                // throw new RuntimeException(e);
+            }
             topControls.setVisible(true);
             topControls.setManaged(true);
             if (timeline != null) {
