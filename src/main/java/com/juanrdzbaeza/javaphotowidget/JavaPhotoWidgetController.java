@@ -13,7 +13,9 @@ import javafx.util.Duration;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.nio.file.Paths;
 import java.util.Objects;
 
 
@@ -82,8 +84,8 @@ public class JavaPhotoWidgetController {
 
     private void loadImages(List<File> files) {
         images.clear();
-
-        for (File file : files) {
+        ArrayList<File> filesDisordered = barajar(files);
+        for (File file : filesDisordered) {
             images.add(new Image(file.toURI().toString()));
         }
         if (!images.isEmpty()) {
@@ -94,6 +96,12 @@ public class JavaPhotoWidgetController {
             // Inicia el carrusel de imágenes
             startImageCarousel();
         }
+    }
+
+    private ArrayList<File> barajar(List<File> files) {
+        ArrayList<File> filesDisordered = new ArrayList<>(files);
+        Collections.shuffle(filesDisordered);
+        return filesDisordered;
     }
 
     private void startImageCarousel() {
