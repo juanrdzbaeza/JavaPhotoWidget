@@ -11,6 +11,7 @@ import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,6 +29,9 @@ public class JavaPhotoWidgetController {
     private int currentImageIndex = 0;
     private Timeline timeline;
 
+    private final JavaPhotoWidgetLogic javaPhotoWidgetLogic = new JavaPhotoWidgetLogic(
+            new com.juanrdzbaeza.javaphotowidget.api.ImageDatabase()
+    );
 
     @FXML
     private void initialize() {
