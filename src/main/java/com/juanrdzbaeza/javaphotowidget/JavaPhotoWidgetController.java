@@ -39,8 +39,13 @@ public class JavaPhotoWidgetController {
     private void initialize() {
 
         // Obtener todas las imágenes del directorio "resources/images"
-        File imagesDir = new File(Objects.requireNonNull(JavaPhotoWidgetApplication.class.getResource("images")).getPath());
-        File[] imageFiles = imagesDir.listFiles((dir, name) -> name.matches("(?i).*\\.(png|jpg|jpeg|gif)"));
+        File[] imageFiles = null;
+        try {
+            File imagesDir = new File(Objects.requireNonNull(JavaPhotoWidgetApplication.class.getResource("images")).getPath());
+            imageFiles = imagesDir.listFiles((dir, name) -> name.matches("(?i).*\\.(png|jpg|jpeg|gif)"));
+        } catch (Exception e) {
+//            throw new RuntimeException(e);
+        }
 
         if (imageFiles != null) {
             for (File file : imageFiles) {
@@ -56,7 +61,8 @@ public class JavaPhotoWidgetController {
         else {
             // Cargar imágenes desde la base de datos al iniciar
             images.addAll(javaPhotoWidgetLogic.loadImagesFromDatabase());
-            startImageCarousel();
+            if (!images.isEmpty())
+                startImageCarousel();
         }
 
     }
