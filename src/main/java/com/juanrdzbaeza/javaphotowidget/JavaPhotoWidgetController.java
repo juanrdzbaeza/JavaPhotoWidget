@@ -109,6 +109,64 @@ public class JavaPhotoWidgetController {
     }
 
     @FXML
+    protected void onLoadFromDBButtonClick() {
+        // Cargar imágenes desde la base de datos
+        List<Image> dbImages = javaPhotoWidgetLogic.loadImagesFromDatabase();
+
+        if (dbImages.isEmpty()) {
+            System.out.println("No hay imágenes en la base de datos.");
+            return;
+        }
+
+        // Crear un diálogo para seleccionar imágenes
+        javafx.scene.control.Dialog<List<Image>> dialog = new javafx.scene.control.Dialog<>();
+        dialog.setTitle("Seleccionar Imágenes");
+        dialog.setHeaderText("Selecciona las imágenes para el carrusel");
+
+        javafx.scene.control.ListView<Image> listView = new javafx.scene.control.ListView<>();
+        listView.getItems().addAll(dbImages);
+        listView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
+
+        listView.setCellFactory(param -> new javafx.scene.control.ListCell<>() {
+            private final ImageView imageView = new ImageView();
+
+            @Override
+            protected void updateItem(Image item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    imageView.setImage(item);
+                    //imageView.setFitWidth(100);
+                    //imageView.setFitHeight(100);
+                    imageView.setPreserveRatio(true);
+                    setGraphic(imageView);
+                }
+            }
+        });
+
+        dialog.getDialogPane().setContent(listView);
+        dialog.getDialogPane().getButtonTypes().addAll(javafx.scene.control.ButtonType.OK, javafx.scene.control.ButtonType.CANCEL);
+
+        dialog.setResultConverter(button -> {
+            if (button == javafx.scene.control.ButtonType.OK) {
+                return new ArrayList<>(listView.getSelectionModel().getSelectedItems());
+            }
+            return null;
+        });
+
+        // Mostrar el diálogo y obtener las imágenes seleccionadas
+        dialog.showAndWait().ifPresent(selectedImages -> {
+            if (!selectedImages.isEmpty()) {
+                images.clear();
+                images.addAll(selectedImages);
+                startImageCarousel();
+            }
+        });
+    }
+
+    @FXML
     protected void onPreviousImageButtonClick() {
 
     }
