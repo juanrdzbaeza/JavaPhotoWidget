@@ -48,7 +48,8 @@ public class JavaPhotoWidgetController {
         }
 
         if (imageFiles != null) {
-            for (File file : imageFiles) {
+            ArrayList<File> filesDisordered = barajar(List.of(imageFiles));
+            for (File file : filesDisordered) {
                 images.add(new Image(file.toURI().toString()));
             }
         }
@@ -65,6 +66,22 @@ public class JavaPhotoWidgetController {
                 startImageCarousel();
         }
 
+        // Resize the window and assign an event after the scene is loaded
+        javafx.application.Platform.runLater(() -> {
+            // Obtener el Stage actual
+            javafx.stage.Stage stage = (javafx.stage.Stage) imageView.getScene().getWindow();
+
+            // Agregar un listener para imprimir el tamaño de la ventana al redimensionar
+            stage.widthProperty().addListener((observable, oldValue, newValue) -> {
+                System.out.println("Ancho de la ventana: " + newValue);
+                imageView.setFitWidth((Double) newValue);
+            });
+
+            stage.heightProperty().addListener((observable, oldValue, newValue) -> {
+                System.out.println("Alto de la ventana: " + newValue);
+                imageView.setFitHeight((Double) newValue);
+            });
+        });
     }
 
     @FXML
@@ -90,6 +107,80 @@ public class JavaPhotoWidgetController {
                 loadImages(List.of(files));
             }
         }
+    }
+
+    @FXML
+    protected void onLoadFromDBButtonClick() {
+        // Cargar imágenes desde la base de datos
+        List<Image> dbImages = javaPhotoWidgetLogic.loadImagesFromDatabase();
+
+        if (dbImages.isEmpty()) {
+            System.out.println("No hay imágenes en la base de datos.");
+            return;
+        }
+
+        // Crear un diálogo para seleccionar imágenes
+        javafx.scene.control.Dialog<List<Image>> dialog = new javafx.scene.control.Dialog<>();
+        dialog.setTitle("Seleccionar Imágenes");
+        dialog.setHeaderText("Selecciona las imágenes para el carrusel");
+
+        javafx.scene.control.ListView<Image> listView = new javafx.scene.control.ListView<>();
+        listView.getItems().addAll(dbImages);
+        listView.getSelectionModel().setSelectionMode(javafx.scene.control.SelectionMode.MULTIPLE);
+
+        listView.setCellFactory(param -> new javafx.scene.control.ListCell<>() {
+            private final ImageView imageView = new ImageView();
+
+            @Override
+            protected void updateItem(Image item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    imageView.setImage(item);
+                    //imageView.setFitWidth(100);
+                    //imageView.setFitHeight(100);
+                    imageView.setPreserveRatio(true);
+                    setGraphic(imageView);
+                }
+            }
+        });
+
+        dialog.getDialogPane().setContent(listView);
+        dialog.getDialogPane().getButtonTypes().addAll(javafx.scene.control.ButtonType.OK, javafx.scene.control.ButtonType.CANCEL);
+
+        dialog.setResultConverter(button -> {
+            if (button == javafx.scene.control.ButtonType.OK) {
+                return new ArrayList<>(listView.getSelectionModel().getSelectedItems());
+            }
+            return null;
+        });
+
+        // Mostrar el diálogo y obtener las imágenes seleccionadas
+        dialog.showAndWait().ifPresent(selectedImages -> {
+            if (!selectedImages.isEmpty()) {
+                images.clear();
+                images.addAll(selectedImages);
+                startImageCarousel();
+            }
+        });
+    }
+
+    @FXML
+    protected void onPreviousImageButtonClick() {
+
+    }
+
+    @FXML
+    protected void onPauseButtonClick() {
+
+    }
+
+
+    @FXML
+    protected void onNextImageButtonClick() {
+
     }
 
     private void loadImages(List<File> files) {
@@ -129,7 +220,7 @@ public class JavaPhotoWidgetController {
 
         // Evento para mostrar los botones al hacer clic en la imagen
         imageView.setOnMouseClicked(event -> {
-            imageView.setFitHeight(1040);
+            //imageView.setFitHeight(1040);
             try {
                 javaPhotoWidgetLogic.saveImageToDatabase(
                         Paths.get(new java.net.URI(imageView.getImage().getUrl())).toString(),
@@ -150,7 +241,7 @@ public class JavaPhotoWidgetController {
             // Evento para ocultar los botones al salir del ImageView
             imageView.getScene().setOnMouseExited(
                     event -> {
-                        imageView.setFitHeight(1080);
+                        //imageView.setFitHeight(1080);
                         topControls.setVisible(false);
                         topControls.setManaged(false);
                         if (timeline != null) {
