@@ -65,6 +65,22 @@ public class JavaPhotoWidgetController {
                 startImageCarousel();
         }
 
+        // Resize the window and assign an event after the scene is loaded
+        javafx.application.Platform.runLater(() -> {
+            // Obtener el Stage actual
+            javafx.stage.Stage stage = (javafx.stage.Stage) imageView.getScene().getWindow();
+
+            // Agregar un listener para imprimir el tamaño de la ventana al redimensionar
+            stage.widthProperty().addListener((observable, oldValue, newValue) -> {
+                System.out.println("Ancho de la ventana: " + newValue);
+                imageView.setFitWidth((Double) newValue);
+            });
+
+            stage.heightProperty().addListener((observable, oldValue, newValue) -> {
+                System.out.println("Alto de la ventana: " + newValue);
+                imageView.setFitHeight((Double) newValue);
+            });
+        });
     }
 
     @FXML
@@ -129,7 +145,7 @@ public class JavaPhotoWidgetController {
 
         // Evento para mostrar los botones al hacer clic en la imagen
         imageView.setOnMouseClicked(event -> {
-            imageView.setFitHeight(1040);
+            //imageView.setFitHeight(1040);
             try {
                 javaPhotoWidgetLogic.saveImageToDatabase(
                         Paths.get(new java.net.URI(imageView.getImage().getUrl())).toString(),
@@ -150,7 +166,7 @@ public class JavaPhotoWidgetController {
             // Evento para ocultar los botones al salir del ImageView
             imageView.getScene().setOnMouseExited(
                     event -> {
-                        imageView.setFitHeight(1080);
+                        //imageView.setFitHeight(1080);
                         topControls.setVisible(false);
                         topControls.setManaged(false);
                         if (timeline != null) {
