@@ -10,10 +10,16 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml"
             fx:controller="com.juanrdzbaeza.javaphotowidget.JavaPhotoWidgetController">
     <top>
-        <HBox fx:id="topControls" spacing="10" alignment="CENTER_LEFT">
-            <Button text="🖻" onAction="#onLoadImagesButtonClick" style="-fx-font-size: 28px" />
-            <Button text="🗁" onAction="#onLoadDirectoryButtonClick" style="-fx-font-size: 28px" />
-        </HBox>
+        <VBox>
+            <HBox fx:id="topControls" spacing="10" alignment="CENTER_LEFT">
+                <Button text="🖻" onAction="#onLoadImagesButtonClick" style="-fx-font-size: 28px" />
+                <Button text="🗁" onAction="#onLoadDirectoryButtonClick" style="-fx-font-size: 28px" />
+                <Button text="🗄️" onAction="#onLoadFromDBButtonClick" style="-fx-font-size: 28px" />
+                <Button text="⏮️" onAction="#onPreviousImageButtonClick" style="-fx-font-size: 28px" />
+                <Button text="⏸️" onAction="#onPauseButtonClick" style="-fx-font-size: 28px" />
+                <Button text="⏭️" onAction="#onNextImageButtonClick" style="-fx-font-size: 28px" />
+            </HBox>
+        </VBox>
     </top>
     <center>
         <VBox alignment="CENTER" spacing="10">

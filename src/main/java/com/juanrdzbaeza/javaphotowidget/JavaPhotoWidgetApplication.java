@@ -19,7 +19,7 @@ public class JavaPhotoWidgetApplication extends Application {
         stage.getIcons().add(new Image(Objects.requireNonNull(JavaPhotoWidgetApplication.class.getResourceAsStream("icon.png")))); // Agrega el ícono
         stage.setScene(scene);
         stage.setAlwaysOnTop(true); // Mantiene la ventana siempre encima
-        stage.setResizable(false); // Impide redimensionar la ventana
+        stage.setResizable(true); // Impide redimensionar la ventana
         //stage.setMaximized(false); // Evita que la ventana se maximice
         stage.show();
     }
