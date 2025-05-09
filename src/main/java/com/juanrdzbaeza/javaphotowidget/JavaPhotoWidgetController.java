@@ -48,7 +48,8 @@ public class JavaPhotoWidgetController {
         }
 
         if (imageFiles != null) {
-            for (File file : imageFiles) {
+            ArrayList<File> filesDisordered = barajar(List.of(imageFiles));
+            for (File file : filesDisordered) {
                 images.add(new Image(file.toURI().toString()));
             }
         }
