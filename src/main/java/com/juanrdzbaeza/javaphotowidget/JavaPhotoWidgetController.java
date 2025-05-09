@@ -108,6 +108,22 @@ public class JavaPhotoWidgetController {
         }
     }
 
+    @FXML
+    protected void onPreviousImageButtonClick() {
+
+    }
+
+    @FXML
+    protected void onPauseButtonClick() {
+
+    }
+
+
+    @FXML
+    protected void onNextImageButtonClick() {
+
+    }
+
     private void loadImages(List<File> files) {
         images.clear();
         ArrayList<File> filesDisordered = barajar(files);
