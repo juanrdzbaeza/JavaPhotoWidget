@@ -139,8 +139,6 @@ public class JavaPhotoWidgetController {
                     setGraphic(null);
                 } else {
                     imageView.setImage(item);
-                    //imageView.setFitWidth(100);
-                    //imageView.setFitHeight(100);
                     imageView.setPreserveRatio(true);
                     setGraphic(imageView);
                 }
@@ -221,14 +219,14 @@ public class JavaPhotoWidgetController {
         // Evento para mostrar los botones al hacer clic en la imagen
         imageView.setOnMouseClicked(event -> {
             //imageView.setFitHeight(1040);
-            try {
-                javaPhotoWidgetLogic.saveImageToDatabase(
-                        Paths.get(new java.net.URI(imageView.getImage().getUrl())).toString(),
-                        imageView.getImage().getUrl().substring(imageView.getImage().getUrl().lastIndexOf("/") + 1)
-                );
-            } catch (URISyntaxException e) {
+//            try {
+//                javaPhotoWidgetLogic.saveImageToDatabase(
+//                        Paths.get(new java.net.URI(imageView.getImage().getUrl())).toString(),
+//                        imageView.getImage().getUrl().substring(imageView.getImage().getUrl().lastIndexOf("/") + 1)
+//                );
+//            } catch (URISyntaxException e) {
                 // throw new RuntimeException(e);
-            }
+//            }
             topControls.setVisible(true);
             topControls.setManaged(true);
             if (timeline != null) {
